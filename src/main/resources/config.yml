@@ -1,0 +1,14 @@
+# worldSocket
+# Version: ${project.version}
+# Gitgub: https://github.com/mc-serverworld/worldsocket
+
+socketserver:
+  threads: 20
+  port: 59898
+client:
+  name: "server"
+  host: "localhost"
+  port: 59898
+
+#debug mode
+debug: false

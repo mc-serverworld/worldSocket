@@ -1,0 +1,10 @@
+main: com.serverworld.worldSocket.paperspigot.worldSocket
+name: ${project.name}
+version: ${project.version}
+authors:
+  - paul0665
+  - mc-serverworld
+website: www.mc-serverworld.com
+commands:
+  buntest:
+    description: test message
