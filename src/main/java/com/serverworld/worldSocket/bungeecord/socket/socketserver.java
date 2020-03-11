@@ -2,6 +2,7 @@ package com.serverworld.worldSocket.bungeecord.socket;
 
 import com.serverworld.worldSocket.bungeecord.events.MessagecomingEvent;
 import com.serverworld.worldSocket.bungeecord.worldSocket;
+import com.serverworld.worldSocket.paperspigot.socket.socketclient;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -9,15 +10,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.server.ExportException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class socketserver extends Thread {
+    static ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
+    private sender sender;
     private static Set<String> names = new HashSet<>();
     private static Set<PrintWriter> writers = new HashSet<>();
     public static worldSocket worldsocket;
@@ -37,6 +40,31 @@ public class socketserver extends Thread {
             }
         }catch (IOException e){
 
+        }
+    }
+
+    public void sendmessage(String message){
+        queue.add(message);
+        sender = new sender();
+        sender.start();
+    }
+
+    private class sender extends Thread {
+        public void run() {
+            try {
+                synchronized (queue) {
+                    if (!queue.isEmpty()) {
+                        for (String stuff : queue) {
+                            for (PrintWriter writer : writers) {
+                                writer.println(stuff);
+                            }
+                        }
+                        queue.clear();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     private static class Handler implements Runnable {

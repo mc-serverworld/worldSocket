@@ -68,8 +68,7 @@ public class socketclient {
                             }else if(message.equals("ERROR:NAME_USED")) {
                                 worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
                             }else{
-                                MessagecomingEvent messagecomingEvent = new MessagecomingEvent(message);
-                                worldsocket.getServer().getPluginManager().callEvent(messagecomingEvent);
+                                worldsocket.eventsender.queue.add(message);
                             }
 
                         }

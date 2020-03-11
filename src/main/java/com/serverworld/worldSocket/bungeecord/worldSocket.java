@@ -42,5 +42,7 @@ public class worldSocket extends Plugin {
         config = new worldSocketconfig(this);
         socketserver= new socketserver(this);
         socketserver.start();
+        getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
+
     }
 }

@@ -1,17 +1,25 @@
 package com.serverworld.worldSocket.bungeecord.commands;
 
 import com.serverworld.worldSocket.bungeecord.*;
+import com.serverworld.worldSocket.bungeecord.util.messagecoder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Plugin;
 
 public class worldSocketcommands extends Command{
-    worldSocket plugin;
-    public worldSocketcommands(Plugin pl,worldSocket worldSocket){
+    worldSocket worldsocket;
+
+    public worldSocketcommands(worldSocket worldSocket){
         super("worldsocket");
-        plugin = worldSocket;
+        this.worldsocket = worldSocket;
 
     }
     public void execute(CommandSender commandSender, String[] strings) {
+        messagecoder messagecoder=new messagecoder();
+        messagecoder.setSender("worldsocket");
+        messagecoder.setReceiver("ALL");
+        messagecoder.setType("TEST");
+        messagecoder.setChannel("test");
+        messagecoder.setMessage("test message測試");
+        worldsocket.socketserver.sendmessage(messagecoder.createmessage());
     }
 }
