@@ -6,7 +6,7 @@
 
     <groupId>com.serverworld</groupId>
     <artifactId>worldSocket</artifactId>
-    <version>1.0.4-release</version>
+    <version>1.0.5-release</version>
     <packaging>jar</packaging>
     <name>worldSocket</name>
 
@@ -45,6 +45,11 @@
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+
+        <repository>
+            <id>destroystokyo-repo</id>
+            <url>https://repo.destroystokyo.com/repository/maven-public//</url>
         </repository>
 
         <repository>
