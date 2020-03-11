@@ -6,7 +6,7 @@
 
     <groupId>com.serverworld</groupId>
     <artifactId>worldSocket</artifactId>
-    <version>1.0.1-release</version>
+    <version>1.0.2-release</version>
     <packaging>jar</packaging>
     <name>worldSocket</name>
 
@@ -40,6 +40,11 @@
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
