@@ -6,7 +6,7 @@
 
     <groupId>com.serverworld</groupId>
     <artifactId>worldSocket</artifactId>
-    <version>1.0.5-release</version>
+    <version>1.0.6-release</version>
     <packaging>jar</packaging>
     <name>worldSocket</name>
 

@@ -1,5 +1,7 @@
 package com.serverworld.worldSocket.bungeecord.socket;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.serverworld.worldSocket.bungeecord.events.MessagecomingEvent;
 import com.serverworld.worldSocket.bungeecord.worldSocket;
 import com.serverworld.worldSocket.paperspigot.socket.socketclient;
@@ -105,16 +107,19 @@ public class socketserver extends Thread {
                 //-------END---------
                 while (true) {
                     String input = in.nextLine();
-                    if(worldsocket.config.debug()){
-                        worldsocket.getLogger().info(name + "send message: " + input);
-                        worldsocket.getLogger().info("sent to " + writers.size() + " clients");
-                    }
-
                     if (input.toLowerCase().startsWith("leave")) {
                         return;
                     }
-                    for (PrintWriter writer : writers) {
-                        writer.println(input);
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
+                    if(jsonmsg.get("receiver").getAsString().toLowerCase()!="proxy"){
+                        if(worldsocket.config.debug()){
+                            worldsocket.getLogger().info(name + "send message: " + input);
+                            worldsocket.getLogger().info("sent to " + writers.size() + " clients");
+                        }
+                        for (PrintWriter writer : writers) {
+                            writer.println(input);
+                        }
                     }
                     worldsocket.getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
                 }
