@@ -1,5 +1,7 @@
 package com.serverworld.worldSocket.paperspigot.socket;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.serverworld.worldSocket.paperspigot.events.MessagecomingEvent;
 import com.serverworld.worldSocket.paperspigot.worldSocket;
 import net.md_5.bungee.api.ChatColor;
@@ -67,8 +69,14 @@ public class socketclient {
                                 worldsocket.getLogger().info(ChatColor.GREEN + "Connect to socket server!");
                             }else if(message.equals("ERROR:NAME_USED")) {
                                 worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
-                            }else{
-                                worldsocket.eventsender.queue.add(message);
+                            }else {
+                                JsonParser jsonParser = new JsonParser();
+                                JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
+                                if(jsonmsg.get("receiver").getAsString().toLowerCase()==worldsocket.config.name()){
+                                    worldsocket.eventsender.queue.add(message);
+                                }else if(jsonmsg.get("receiver").getAsString().toLowerCase()=="all"){
+                                    worldsocket.eventsender.queue.add(message);
+                                }
                             }
 
                         }
