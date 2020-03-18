@@ -10,5 +10,6 @@ client:
   host: "localhost"
   port: 59898
 
-#debug mode
+#dont touch this plz
 debug: false
+configversion: 1

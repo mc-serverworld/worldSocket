@@ -25,7 +25,7 @@ public class messagecoder {
         this.message=message;
     }
     public String createmessage(){
-        if(this.sender.isEmpty()) {return null;}
+        if(sender.isEmpty()){return null;}
         JsonObject jsonmsg = new JsonObject();
         jsonmsg.addProperty("sender", sender);
         jsonmsg.addProperty("receiver", receiver);

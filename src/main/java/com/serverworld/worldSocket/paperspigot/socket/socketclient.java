@@ -72,9 +72,9 @@ public class socketclient {
                             }else {
                                 JsonParser jsonParser = new JsonParser();
                                 JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
-                                if(jsonmsg.get("receiver").getAsString().toLowerCase()==worldsocket.config.name()){
+                                if(jsonmsg.get("receiver").getAsString().toLowerCase()==worldsocket.config.name()&&jsonmsg.get("receiver").getAsString().toLowerCase()!="socketapi"){
                                     worldsocket.eventsender.queue.add(message);
-                                }else if(jsonmsg.get("receiver").getAsString().toLowerCase()=="all"){
+                                }else if(jsonmsg.get("receiver").getAsString().toLowerCase()=="all"&&jsonmsg.get("receiver").getAsString().toLowerCase()!="socketapi"){
                                     worldsocket.eventsender.queue.add(message);
                                 }
                             }

@@ -3,6 +3,7 @@ package com.serverworld.worldSocket.paperspigot;
 import com.serverworld.worldSocket.paperspigot.commands.worldSocketCommands;
 import com.serverworld.worldSocket.paperspigot.events.MessagecomingEvent;
 import com.serverworld.worldSocket.paperspigot.socket.eventsender;
+import com.serverworld.worldSocket.paperspigot.util.messager;
 import com.serverworld.worldSocket.paperspigot.worldSocketconfig;
 import com.serverworld.worldSocket.paperspigot.socket.socketclient;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +18,7 @@ public class worldSocket extends JavaPlugin {
     public worldSocketconfig config;
     public eventsender eventsender;
     public socketclient client;
+    public messager messager;
 
 
     public void onLoad() {
@@ -26,9 +28,9 @@ public class worldSocket extends JavaPlugin {
     @Override
     public void onEnable() {
         config.loadDefConfig();
-        eventsender=new eventsender(this);
+        eventsender = new eventsender(this);
         client = new socketclient(this);
         client.startlogin();
-        this.getCommand("buntest").setExecutor(new worldSocketCommands(this)); //test socket
+        messager = new messager(this);
     }
 }
