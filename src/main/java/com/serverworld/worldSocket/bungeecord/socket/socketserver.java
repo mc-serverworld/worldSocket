@@ -112,7 +112,7 @@ public class socketserver extends Thread {
                     }
                     JsonParser jsonParser = new JsonParser();
                     JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
-                    if(jsonmsg.get("receiver").getAsString().toLowerCase()!="proxy"){
+                    if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
                         if(worldsocket.config.debug()){
                             worldsocket.getLogger().info(name + "send message: " + input);
                             worldsocket.getLogger().info("sent to " + writers.size() + " clients");

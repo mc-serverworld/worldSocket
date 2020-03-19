@@ -10,7 +10,6 @@ public class worldSocketCommands implements CommandExecutor {
     worldSocket worldsocket;
     public worldSocketCommands(worldSocket pl){worldsocket=pl;}
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        worldsocket.client.sendmessage(strings[0]);
         return true;
     }
 }

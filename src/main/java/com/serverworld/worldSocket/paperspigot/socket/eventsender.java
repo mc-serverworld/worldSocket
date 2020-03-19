@@ -8,10 +8,9 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class eventsender {
-    public static ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
+    static ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
     public eventsender(worldSocket worldsocket){
-        BukkitTask task = new BukkitRunnable() {
-
+        worldsocket.getServer().getScheduler().scheduleSyncRepeatingTask(worldsocket, new Runnable() {
             @Override
             public void run() {
                 synchronized (queue) {
@@ -24,7 +23,10 @@ public class eventsender {
                     }
                 }
             }
-        }.runTaskTimer(worldsocket, 20 * 2, 20 * 2);
+        }, 0L, 20L);
+    }
+    public void addeventqueue(String message){
+        queue.add(message);
     }
 
 }
