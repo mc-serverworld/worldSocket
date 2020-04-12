@@ -93,7 +93,8 @@ public class socketserver extends Thread {
                     JsonParser login_jsonParser = new JsonParser();
                     JsonObject login_jsonmsg = login_jsonParser.parse(loginmessage).getAsJsonObject();
 
-                    String 
+                    String
+                            
                     if(login_jsonmsg.get("password").getAsString().equals()){
 
                     }
