@@ -18,7 +18,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.math.BigInteger;
+import java.security.MessageDigest;
 
 public class socketserver extends Thread {
     static ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
@@ -70,6 +71,7 @@ public class socketserver extends Thread {
         }
     }
     private static class Handler implements Runnable {
+        private String loginmessage;
         private String name;
         private Socket socket;
         private Scanner in;
@@ -84,9 +86,16 @@ public class socketserver extends Thread {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
                 while (true) {
-                    name = in.nextLine();
-                    if (name == null) {
+                    loginmessage = in.nextLine();
+                    if (loginmessage == null) {
                         return;
+                    }
+                    JsonParser login_jsonParser = new JsonParser();
+                    JsonObject login_jsonmsg = login_jsonParser.parse(loginmessage).getAsJsonObject();
+
+                    String 
+                    if(login_jsonmsg.get("password").getAsString().equals()){
+
                     }
                     synchronized (names) {
                         if (!names.contains(name)) {

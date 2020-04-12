@@ -16,5 +16,5 @@ public class worldSocketconfig {
     public String name() {return plugin.getConfig().getString("client.name");}
     public String host() {return plugin.getConfig().getString("client.host");}
     public int clientport() {return plugin.getConfig().getInt("client.port");}
-    public boolean debug() {return plugin.getConfig().getBoolean("debug");}
+    public boolean debug() {return plugin.getConfig().getBoolean("configinfo.debug");}
 }

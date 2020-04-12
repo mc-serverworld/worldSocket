@@ -2,14 +2,21 @@
 # Version: ${project.version}
 # Gitgub: https://github.com/mc-serverworld/worldsocket
 
+configinfo:
+  api-version: 2
+  debug: false
+
 socketserver:
+  password: "aba9cfde1fd706a0c83f373cd1c10e5f11faaa765e2229f9723f6f9b33e3506037820a9a0f1ed111d220e022b7a70c8ff88cb15e9db4905a0fbc5128335302fa"
   threads: 20
   port: 59898
+
 client:
+  password: "aba9cfde1fd706a0c83f373cd1c10e5f11faaa765e2229f9723f6f9b33e3506037820a9a0f1ed111d220e022b7a70c8ff88cb15e9db4905a0fbc5128335302fa"
   name: "server"
-  host: "localhost"
+  host: "127.0.0.1"
   port: 59898
 
 #dont touch this plz
-debug: false
+
 configversion: 1
