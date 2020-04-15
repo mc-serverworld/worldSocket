@@ -1,4 +1,5 @@
 **Warring**
+(SSL only for release build)
 
 None of these applications even try to secure communication.
 
