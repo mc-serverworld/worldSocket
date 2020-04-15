@@ -33,9 +33,9 @@ public class socketserver extends Thread {
     }
 
     public void run() {
-        try (ServerSocket listener = new ServerSocket(worldsocket.config.serverport())) {
+        try (ServerSocket listener = new ServerSocket(worldsocket.config.port())) {
             worldsocket.getLogger().info("starting socket server...");
-            worldsocket.getLogger().info("using port "+worldsocket.config.serverport());
+            worldsocket.getLogger().info("using port "+worldsocket.config.port());
             ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
             worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
             while (true) {
@@ -89,14 +89,6 @@ public class socketserver extends Thread {
                     loginmessage = in.nextLine();
                     if (loginmessage == null) {
                         return;
-                    }
-                    JsonParser login_jsonParser = new JsonParser();
-                    JsonObject login_jsonmsg = login_jsonParser.parse(loginmessage).getAsJsonObject();
-
-                    String
-                            
-                    if(login_jsonmsg.get("password").getAsString().equals()){
-
                     }
                     synchronized (names) {
                         if (!names.contains(name)) {

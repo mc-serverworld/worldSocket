@@ -39,7 +39,7 @@ public class socketclient {
         @Override
         public void run() {
             try{
-                socket = new Socket(worldsocket.config.host(), worldsocket.config.clientport());
+                socket = new Socket(worldsocket.config.host(), worldsocket.config.port());
                 Scanner in = new Scanner(socket.getInputStream());
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 receiver.start();
