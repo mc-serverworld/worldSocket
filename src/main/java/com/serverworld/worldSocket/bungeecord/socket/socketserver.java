@@ -86,8 +86,8 @@ public class socketserver extends Thread {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
                 while (true) {
-                    loginmessage = in.nextLine();
-                    if (loginmessage == null) {
+                    name = in.nextLine();
+                    if (name == null) {
                         return;
                     }
                     synchronized (names) {

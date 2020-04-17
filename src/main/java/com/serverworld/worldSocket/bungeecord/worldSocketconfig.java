@@ -25,8 +25,13 @@ public class worldSocketconfig {
 
     //SSL
     public boolean useSSL() {return plugin.configuration.getBoolean("SSL.useSSL");}
-    public String keyStore_file() {return plugin.configuration.getString("SSL.keyStore_file");}
-    public String keyStorePassword() {return plugin.configuration.getString("SSL.keyStorePassword");}
-    public String trustStore_file() {return plugin.configuration.getString("SSL.trustStore_file");}
-    public String trustStorePassword() {return plugin.configuration.getString("SSL.trustStorePassword");}
+    public String server_keyStore_file() {return plugin.configuration.getString("SSL.server.keyStore_file");}
+    public String server_trustStore_file() {return plugin.configuration.getString("SSL.server.trustStore_file");}
+    public String server_keyStore_password() {return plugin.configuration.getString("SSL.server.keyStorePassword");}
+    public String server_trustStore_password() {return plugin.configuration.getString("SSL.server.trustStorePassword");}
+
+    public String client_keyStore_file() {return plugin.configuration.getString("SSL.client.keyStore_file");}
+    public String client_trustStore_file() {return plugin.configuration.getString("SSL.client.trustStore_file");}
+    public String client_keyStore_password() {return plugin.configuration.getString("SSL.client.keyStorePassword");}
+    public String client_trustStore_password() {return plugin.configuration.getString("SSL.client.trustStorePassword");}
 }

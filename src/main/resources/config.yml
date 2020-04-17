@@ -3,16 +3,9 @@
 # Gitgub: https://github.com/mc-serverworld/worldsocket
 
 configinfo:
-  api-version: 3
+  api-version: 4
   debug: false
 #dont touch this plz
-
-SSL:
-  useSSL: false
-  keyStore_file: ""
-  keyStorePassword: ""
-  trustStore_file: ""
-  trustStorePassword: ""
 
 general:
   port: 59898
@@ -24,3 +17,16 @@ socketserver:
 client:
   name: "server"
   host: "127.0.0.1"
+
+SSL:
+  useSSL: false
+  server:
+    keyStore_file: "D://server/kserver.keystore"
+    trustStore_file: "D://server/tserver.keystore"
+    keyStorePassword: "password"
+    trustStorePassword: "password"
+  client:
+    keyStore_file: "D://server/kclient.keystore"
+    trustStore_file: "D://server/tclient.keystore"
+    keyStorePassword: "password"
+    trustStorePassword: "password"

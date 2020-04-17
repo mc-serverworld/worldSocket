@@ -6,12 +6,13 @@ import com.serverworld.worldSocket.bungeecord.events.MessagecomingEvent;
 import com.serverworld.worldSocket.bungeecord.worldSocket;
 import net.md_5.bungee.api.ChatColor;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyStore;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -26,14 +27,47 @@ public class SSLsocketserver extends Thread {
     private static Set<PrintWriter> writers = new HashSet<>();
     public static worldSocket worldsocket;
 
+    private SSLContext ctx;
+    private KeyManagerFactory kmf;
+    private TrustManagerFactory tmf;
+    private KeyStore ks;
+    private KeyStore tks;
+
+
+    private String SERVER_KEY_STORE_FILE;
+    private String SERVER_TRUST_KEY_STORE_FILE;
+    private String SERVER_KEY_STORE_PASSWORD;
+    private String SERVER_TRUST_KEY_STORE_PASSWORD;
+
     public SSLsocketserver(worldSocket worldSocket) {
         worldsocket=worldSocket;
     }
 
     public void run() {
+        try{
+            SSLContext ctx = SSLContext.getInstance("SSL");
+
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+
+            KeyStore ks = KeyStore.getInstance("JKS");
+            KeyStore tks = KeyStore.getInstance("JKS");
+
+            ks.load(new FileInputStream(SERVER_KEY_STORE_FILE), SERVER_KEY_STORE_PASSWORD.toCharArray());
+            tks.load(new FileInputStream(SERVER_TRUST_KEY_STORE_FILE), SERVER_TRUST_KEY_STORE_PASSWORD.toCharArray());
+
+            kmf.init(ks, SERVER_KEY_STORE_PASSWORD.toCharArray());
+            tmf.init(tks);
+
+            ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        }catch (Exception e){
+
+        }
         SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-        try (SSLServerSocket listener = (SSLServerSocket) serverSocketFactory.createServerSocket(worldsocket.config.port())) {
+        try (SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port())) {
+            listener.setNeedClientAuth(true);
             worldsocket.getLogger().info("starting socket server...");
+            worldsocket.getLogger().info("using SSL");
             worldsocket.getLogger().info("using port "+worldsocket.config.port());
             ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
             worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
@@ -90,14 +124,20 @@ public class SSLsocketserver extends Thread {
                         return;
                     }
                     synchronized (names) {
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonmsg = jsonParser.parse(loginmessage).getAsJsonObject();
+                        name = jsonmsg.get("name").getAsString();
                         if (!names.contains(name)) {
-                            names.add(name);
-                            break;
+                            if (jsonmsg.get("password").getAsString().equals(worldsocket.config.password())){
+                                names.add(name);
+                                break;
+                            }else {
+                                out.println("ERROR:WRONG_PASSWORD");
+                                worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!");
+                            }
                         }else {
                             out.println("ERROR:NAME_USED");
-                            if(worldsocket.config.debug()){
-                                worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
-                            }
+                            worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
                         }
                     }
                 }

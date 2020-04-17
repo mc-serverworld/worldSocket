@@ -20,7 +20,7 @@ public class loginer {
         JsonObject jsonmsg = new JsonObject();
         jsonmsg.addProperty("name", name);
         jsonmsg.addProperty("password", password);
-        jsonmsg.addProperty("apiversion", apiverison);
+        //jsonmsg.addProperty("apiversion", apiverison);
         return (jsonmsg.toString());
     }
 }
