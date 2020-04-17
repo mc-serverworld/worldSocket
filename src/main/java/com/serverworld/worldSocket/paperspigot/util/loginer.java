@@ -1,4 +1,4 @@
-package com.serverworld.worldSocket.bungeecord.util;
+package com.serverworld.worldSocket.paperspigot.util;
 
 import com.google.gson.JsonObject;
 

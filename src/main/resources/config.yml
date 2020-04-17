@@ -20,6 +20,7 @@ client:
 
 SSL:
   useSSL: false
+  forceSSL: false
   server:
     keyStore_file: "D://server/kserver.keystore"
     trustStore_file: "D://server/tserver.keystore"

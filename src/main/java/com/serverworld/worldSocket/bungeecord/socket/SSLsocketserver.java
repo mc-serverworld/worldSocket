@@ -63,7 +63,6 @@ public class SSLsocketserver extends Thread {
         }catch (Exception e){
 
         }
-        SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
         try (SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port())) {
             listener.setNeedClientAuth(true);
             worldsocket.getLogger().info("starting socket server...");
@@ -133,7 +132,7 @@ public class SSLsocketserver extends Thread {
                                 break;
                             }else {
                                 out.println("ERROR:WRONG_PASSWORD");
-                                worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!");
+                                worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!" + " IP: " + socket.getRemoteSocketAddress());
                             }
                         }else {
                             out.println("ERROR:NAME_USED");

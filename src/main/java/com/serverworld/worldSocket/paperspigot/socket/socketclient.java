@@ -69,6 +69,8 @@ public class socketclient {
                                 worldsocket.getLogger().info(ChatColor.GREEN + "Connect to socket server!");
                             }else if(message.equals("ERROR:NAME_USED")) {
                                 worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
+                            }else if(message.equals("ERROR:WRONG_PASSWORD")){
+                                worldsocket.getLogger().warning(ChatColor.RED + "Wrong password!");
                             }else {
                                 JsonParser jsonParser = new JsonParser();
                                 JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();

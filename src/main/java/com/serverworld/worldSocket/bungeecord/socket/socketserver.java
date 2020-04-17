@@ -35,6 +35,8 @@ public class socketserver extends Thread {
     public void run() {
         try (ServerSocket listener = new ServerSocket(worldsocket.config.port())) {
             worldsocket.getLogger().info("starting socket server...");
+            worldsocket.getLogger().warning(ChatColor.YELLOW + "not using SSL");
+            worldsocket.getLogger().warning(ChatColor.YELLOW + "You should use SSL anyway, or it wont be encryption!");
             worldsocket.getLogger().info("using port "+worldsocket.config.port());
             ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
             worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
@@ -86,19 +88,26 @@ public class socketserver extends Thread {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
                 while (true) {
-                    name = in.nextLine();
-                    if (name == null) {
+                    loginmessage = in.nextLine();
+                    if (loginmessage == null) {
                         return;
                     }
                     synchronized (names) {
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonmsg = jsonParser.parse(loginmessage).getAsJsonObject();
+                        name = jsonmsg.get("name").getAsString();
                         if (!names.contains(name)) {
-                            names.add(name);
-                            break;
+                            if (jsonmsg.get("password").getAsString().equals(worldsocket.config.password())){
+                                names.add(name);
+                                break;
+                            }else {
+                                out.println("ERROR:WRONG_PASSWORD");
+                                worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!" + " IP: " + socket.getRemoteSocketAddress());
+                                worldsocket.getLogger().warning(ChatColor.RED + "You not using SSL. And your password isn't encryption!");
+                            }
                         }else {
                             out.println("ERROR:NAME_USED");
-                            if(worldsocket.config.debug()){
-                                worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
-                            }
+                            worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
                         }
                     }
                 }

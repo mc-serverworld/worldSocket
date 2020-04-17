@@ -26,6 +26,7 @@ public class worldSocketconfig {
 
     //SSL
     public boolean useSSL() {return plugin.getConfig().getBoolean("SSL.useSSL");}
+    public boolean forceSSL() {return plugin.getConfig().getBoolean("SSL.forceSSL");}
     public String server_keyStore_file() {return plugin.getConfig().getString("SSL.server.keyStore_file");}
     public String server_trustStore_file() {return plugin.getConfig().getString("SSL.server.trustStore_file");}
     public String server_keyStore_password() {return plugin.getConfig().getString("SSL.server.keyStorePassword");}
