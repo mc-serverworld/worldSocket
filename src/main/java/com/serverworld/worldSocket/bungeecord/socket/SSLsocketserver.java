@@ -45,6 +45,10 @@ public class SSLsocketserver extends Thread {
 
     public void run() {
         try{
+            SERVER_KEY_STORE_FILE = worldsocket.config.server_keyStore_file();
+            SERVER_TRUST_KEY_STORE_FILE = worldsocket.config.server_trustStore_file();
+            SERVER_KEY_STORE_PASSWORD = worldsocket.config.server_keyStore_password();
+            SERVER_TRUST_KEY_STORE_PASSWORD = worldsocket.config.server_trustStore_password();
             SSLContext ctx = SSLContext.getInstance("SSL");
 
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
