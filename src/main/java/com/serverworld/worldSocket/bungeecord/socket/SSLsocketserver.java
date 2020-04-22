@@ -27,11 +27,12 @@ public class SSLsocketserver extends Thread {
     private static Set<PrintWriter> writers = new HashSet<>();
     public static worldSocket worldsocket;
 
-    private SSLContext ctx;
-    private KeyManagerFactory kmf;
-    private TrustManagerFactory tmf;
-    private KeyStore ks;
-    private KeyStore tks;
+    SSLServerSocket listener;
+    SSLContext ctx;
+    KeyManagerFactory kmf;
+    TrustManagerFactory tmf;
+    KeyStore ks;
+    KeyStore tks;
 
 
     private String SERVER_KEY_STORE_FILE;
@@ -64,10 +65,11 @@ public class SSLsocketserver extends Thread {
             tmf.init(tks);
 
             ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
         }catch (Exception e){
 
         }
-        try (SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port())) {
+        try(SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port())) {
             listener.setNeedClientAuth(worldsocket.config.forceSSL());
             worldsocket.getLogger().info("starting socket server...");
             worldsocket.getLogger().info("using SSL");
@@ -79,7 +81,7 @@ public class SSLsocketserver extends Thread {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
             }
-        }catch (IOException e){
+        }catch (Exception e){
 
         }
     }
