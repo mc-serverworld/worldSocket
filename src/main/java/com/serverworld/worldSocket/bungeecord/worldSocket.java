@@ -1,6 +1,7 @@
 package com.serverworld.worldSocket.bungeecord;
 
 import com.serverworld.worldSocket.bungeecord.commands.*;
+import com.serverworld.worldSocket.bungeecord.socket.SSLsocketserver;
 import com.serverworld.worldSocket.bungeecord.socket.socketserver;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -19,6 +20,7 @@ public class worldSocket extends Plugin {
     private File file;
 
     public socketserver socketserver;
+    public SSLsocketserver SSLsocketserver;
 
     @Override
     public void onEnable() {
@@ -40,9 +42,21 @@ public class worldSocket extends Plugin {
             e.printStackTrace();
         }
         config = new worldSocketconfig(this);
-        socketserver= new socketserver(this);
-        socketserver.start();
+        if(config.useSSL()){
+            SSLsocketserver = new SSLsocketserver(this);
+            SSLsocketserver.start();
+        }else {
+            socketserver = new socketserver(this);
+            socketserver.start();
+        }
         getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
 
+    }
+    public void sendmessage(String msg){
+        if(config.useSSL()){
+            SSLsocketserver.sendmessage(msg);
+        }else {
+            socketserver.sendmessage(msg);
+        }
     }
 }

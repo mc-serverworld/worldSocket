@@ -20,6 +20,6 @@ public class worldSocketcommands extends Command{
         messagecoder.setType("TEST");
         messagecoder.setChannel("test");
         messagecoder.setMessage("test message測試");
-        worldsocket.socketserver.sendmessage(messagecoder.createmessage());
+        worldsocket.sendmessage(messagecoder.createmessage());
     }
 }
