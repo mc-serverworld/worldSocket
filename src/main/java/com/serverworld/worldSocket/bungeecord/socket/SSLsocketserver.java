@@ -49,13 +49,13 @@ public class SSLsocketserver extends Thread {
             SERVER_TRUST_KEY_STORE_FILE = worldsocket.config.server_trustStore_file();
             SERVER_KEY_STORE_PASSWORD = worldsocket.config.server_keyStore_password();
             SERVER_TRUST_KEY_STORE_PASSWORD = worldsocket.config.server_trustStore_password();
-            SSLContext ctx = SSLContext.getInstance("SSL");
+            ctx = SSLContext.getInstance("SSL");
 
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+            kmf = KeyManagerFactory.getInstance("SunX509");
+            tmf = TrustManagerFactory.getInstance("SunX509");
 
-            KeyStore ks = KeyStore.getInstance("JKS");
-            KeyStore tks = KeyStore.getInstance("JKS");
+            ks = KeyStore.getInstance("JKS");
+            tks = KeyStore.getInstance("JKS");
 
             ks.load(new FileInputStream(SERVER_KEY_STORE_FILE), SERVER_KEY_STORE_PASSWORD.toCharArray());
             tks.load(new FileInputStream(SERVER_TRUST_KEY_STORE_FILE), SERVER_TRUST_KEY_STORE_PASSWORD.toCharArray());
@@ -68,9 +68,11 @@ public class SSLsocketserver extends Thread {
 
         }
         try (SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port())) {
-            listener.setNeedClientAuth(true);
+            listener.setNeedClientAuth(worldsocket.config.forceSSL());
             worldsocket.getLogger().info("starting socket server...");
             worldsocket.getLogger().info("using SSL");
+            if(worldsocket.config.forceSSL())
+                worldsocket.getLogger().info("force using SSL");
             worldsocket.getLogger().info("using port "+worldsocket.config.port());
             ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
             worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
