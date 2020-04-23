@@ -22,12 +22,12 @@ SSL:
   useSSL: false
   forceSSL: false
   server:
-    keyStore_file: "D://server/kserver.keystore"
-    trustStore_file: "D://server/tserver.keystore"
+    keyStore_file: "D:\\server\\kserver.keystore"
+    trustStore_file: "D:\\server\\tserver.keystore"
     keyStorePassword: "password"
     trustStorePassword: "password"
   client:
-    keyStore_file: "D://server/kclient.keystore"
-    trustStore_file: "D://server/tclient.keystore"
+    keyStore_file: "D:\\server\kclient.keystore"
+    trustStore_file: "D:\\server\tclient.keystore"
     keyStorePassword: "password"
     trustStorePassword: "password"
