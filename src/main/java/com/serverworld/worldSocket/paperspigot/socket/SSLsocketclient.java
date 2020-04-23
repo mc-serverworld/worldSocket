@@ -52,6 +52,11 @@ public class SSLsocketclient {
         @Override
         public void run() {
             try {
+                CLIENT_KEY_STORE_FILE = worldsocket.config.client_keyStore_file();
+                CLIENT_TRUST_KEY_STORE_FILE = worldsocket.config.client_trustStore_file();
+                CLIENT_KEY_STORE_PASSWORD = worldsocket.config.client_keyStore_password();
+                CLIENT_TRUST_KEY_STORE_PASSWORD = worldsocket.config.client_keyStore_password();
+                
                 ctx = SSLContext.getInstance("SSL");
 
                 kmf = KeyManagerFactory.getInstance("SunX509");
