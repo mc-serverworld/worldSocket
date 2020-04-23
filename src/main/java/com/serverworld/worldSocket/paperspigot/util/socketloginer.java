@@ -2,7 +2,7 @@ package com.serverworld.worldSocket.paperspigot.util;
 
 import com.google.gson.JsonObject;
 
-public class loginer {
+public class socketloginer {
     private String name;
     private String password;
     private String apiverison;

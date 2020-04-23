@@ -11,6 +11,6 @@ public class messager {
     }
 
     public static void sendmessage (String message){
-        worldsocket.client.sendmessage(message);
+        worldsocket.sendmessage(message);
     }
 }

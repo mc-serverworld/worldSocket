@@ -2,12 +2,16 @@ package com.serverworld.worldSocket.paperspigot.socket;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.serverworld.worldSocket.paperspigot.util.socketloginer;
 import com.serverworld.worldSocket.paperspigot.worldSocket;
 import net.md_5.bungee.api.ChatColor;
 
+import javax.net.ssl.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.KeyStore;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -17,7 +21,12 @@ public class SSLsocketclient {
     private receiver receiver = new receiver();
     private sender sender = new sender();
 
-    static Socket socket;
+    private String CLIENT_KEY_STORE_FILE;
+    private String CLIENT_TRUST_KEY_STORE_FILE;
+    private String CLIENT_KEY_STORE_PASSWORD;
+    private String CLIENT_TRUST_KEY_STORE_PASSWORD;
+
+    static SSLSocket socket;
     private static Scanner in;
     private static PrintWriter out;
 
@@ -35,14 +44,41 @@ public class SSLsocketclient {
     }
 
     class login extends Thread{
+        SSLContext ctx;
+        KeyManagerFactory kmf;
+        TrustManagerFactory tmf;
+        KeyStore ks;
+        KeyStore tks;
         @Override
         public void run() {
+            try {
+                ctx = SSLContext.getInstance("SSL");
+
+                kmf = KeyManagerFactory.getInstance("SunX509");
+                tmf = TrustManagerFactory.getInstance("SunX509");
+
+                ks = KeyStore.getInstance("JKS");
+                tks = KeyStore.getInstance("JKS");
+
+                ks.load(new FileInputStream(CLIENT_KEY_STORE_FILE), CLIENT_KEY_STORE_PASSWORD.toCharArray());
+                tks.load(new FileInputStream(CLIENT_TRUST_KEY_STORE_FILE), CLIENT_TRUST_KEY_STORE_PASSWORD.toCharArray());
+
+                kmf.init(ks, CLIENT_KEY_STORE_PASSWORD.toCharArray());
+                tmf.init(tks);
+
+                ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try{
-                socket = new Socket(worldsocket.config.host(), worldsocket.config.port());
+                socket = (SSLSocket) ctx.getSocketFactory().createSocket(worldsocket.config.host(),worldsocket.config.port());
                 Scanner in = new Scanner(socket.getInputStream());
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 receiver.start();
-                out.println(worldsocket.config.name());
+                socketloginer socketloginer = new socketloginer();
+                socketloginer.setName(worldsocket.config.name());
+                socketloginer.setPassword(worldsocket.config.password());
+                out.println(socketloginer.createmessage());
             } catch (IOException e) {
                 e.printStackTrace();
                 worldsocket.getLogger().warning(ChatColor.RED + "Error while connect to socket server");
