@@ -21,6 +21,12 @@ public class SSLsocketclient {
     private receiver receiver = new receiver();
     private sender sender = new sender();
 
+    SSLContext ctx;
+    KeyManagerFactory kmf;
+    TrustManagerFactory tmf;
+    KeyStore ks;
+    KeyStore tks;
+
     private String CLIENT_KEY_STORE_FILE;
     private String CLIENT_TRUST_KEY_STORE_FILE;
     private String CLIENT_KEY_STORE_PASSWORD;
@@ -44,19 +50,14 @@ public class SSLsocketclient {
     }
 
     class login extends Thread{
-        SSLContext ctx;
-        KeyManagerFactory kmf;
-        TrustManagerFactory tmf;
-        KeyStore ks;
-        KeyStore tks;
         @Override
         public void run() {
             try {
                 CLIENT_KEY_STORE_FILE = worldsocket.config.client_keyStore_file();
                 CLIENT_TRUST_KEY_STORE_FILE = worldsocket.config.client_trustStore_file();
                 CLIENT_KEY_STORE_PASSWORD = worldsocket.config.client_keyStore_password();
-                CLIENT_TRUST_KEY_STORE_PASSWORD = worldsocket.config.client_keyStore_password();
-                
+                CLIENT_TRUST_KEY_STORE_PASSWORD = worldsocket.config.client_trustStore_password();
+
                 ctx = SSLContext.getInstance("SSL");
 
                 kmf = KeyManagerFactory.getInstance("SunX509");

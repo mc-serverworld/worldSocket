@@ -27,7 +27,7 @@ SSL:
     keyStorePassword: "password"
     trustStorePassword: "password"
   client:
-    keyStore_file: "D:\\server\kclient.keystore"
-    trustStore_file: "D:\\server\tclient.keystore"
+    keyStore_file: "D:\\server\\kclient.keystore"
+    trustStore_file: "D:\\server\\tclient.keystore"
     keyStorePassword: "password"
     trustStorePassword: "password"
