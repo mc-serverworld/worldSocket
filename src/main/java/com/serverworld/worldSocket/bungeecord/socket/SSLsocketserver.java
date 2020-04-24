@@ -78,7 +78,7 @@ public class SSLsocketserver extends Thread {
             ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
             worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
             while (true) {
-                pool.execute(new Handler(listener.accept()));
+                pool.execute(new Handler((SSLSocket) listener.accept()));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -112,18 +112,18 @@ public class SSLsocketserver extends Thread {
     private static class Handler implements Runnable {
         private String loginmessage;
         private String name;
-        private Socket socket;
+        private SSLSocket socket;
         private Scanner in;
         private PrintWriter out;
 
-        public Handler(Socket socket) {
+        public Handler(SSLSocket socket) {
             this.socket = socket;
         }
 
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());
-                out = new PrintWriter(socket.getOutputStream(), true);
+                out = new PrintWriter(socket.getOutputStream());
                 while (true) {
                     loginmessage = in.nextLine();
                     if (loginmessage == null) {
@@ -139,17 +139,20 @@ public class SSLsocketserver extends Thread {
                                 break;
                             }else {
                                 out.println("ERROR:WRONG_PASSWORD");
+                                out.flush();
                                 worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!" + " IP: " + socket.getRemoteSocketAddress());
                             }
                         }else {
                             out.println("ERROR:NAME_USED");
+                            out.flush();
                             worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
                         }
                     }
                 }
                 out.println("ACCEPTED");
+                out.flush();
                 worldsocket.getLogger().info("Socket join: " + name);
-                for (PrintWriter writer : writers) { }
+                //for (PrintWriter writer : writers) { }
                 writers.add(out);
                 //-------END---------
                 while (true) {
@@ -166,6 +169,7 @@ public class SSLsocketserver extends Thread {
                         }
                         for (PrintWriter writer : writers) {
                             writer.println(input);
+                            writer.flush();
                         }
                     }
                     worldsocket.getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
