@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SSLsocketclient {
     private worldSocket worldsocket;
     private login loginer = new login();
-    private receiver receiver;// = new receiver();
     private sender sender = new sender();
 
 
