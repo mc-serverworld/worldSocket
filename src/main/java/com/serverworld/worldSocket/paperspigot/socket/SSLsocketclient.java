@@ -84,8 +84,6 @@ public class SSLsocketclient {
                 socket.setNeedClientAuth(worldsocket.config.forceSSL());
                 Scanner in = new Scanner(socket.getInputStream());
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
-                receiver = new receiver();
-                receiver.start();
                 socketloginer socketloginer = new socketloginer();
                 socketloginer.setName(worldsocket.config.name().toString());
                 socketloginer.setPassword(worldsocket.config.password().toString());
@@ -93,6 +91,32 @@ public class SSLsocketclient {
                 out.flush();
                 if(worldsocket.config.debug())
                     worldsocket.getLogger().info("send login msg: " + socketloginer.createmessage());
+                while (true){
+                    in = new Scanner(socket.getInputStream());
+                    if (in.hasNextLine()) {
+                        String message = in.nextLine();
+                        if (worldsocket.config.debug()) {worldsocket.getLogger().info("received: " + message);}
+                        if(message.equals("ACCEPTED")){
+                            worldsocket.getLogger().info(ChatColor.GREEN + "Connect to socket server!");
+                        }else if(message.equals("ERROR:NAME_USED")) {
+                            worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
+                        }else if(message.equals("ERROR:WRONG_PASSWORD")){
+                            worldsocket.getLogger().warning(ChatColor.RED + "Wrong password!");
+                        }else {
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
+                            if(jsonmsg.get("receiver").getAsString().toLowerCase().equals(worldsocket.config.name()) && !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+                                worldsocket.eventsender.addeventqueue(message);
+                            }else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")&& !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+                                worldsocket.eventsender.addeventqueue(message);
+                            }else if(jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+
+                            }
+                        }
+
+                    }
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 worldsocket.getLogger().warning(ChatColor.RED + "Error while connect to socket server");
@@ -104,39 +128,6 @@ public class SSLsocketclient {
         queue.add(message);
         sender = new sender();
         sender.start();
-    }
-    private class receiver extends Thread {
-        public void run() {
-            try {
-                Scanner in = new Scanner(socket.getInputStream());
-                while (!shouldStop) {
-                    synchronized (socket) {
-                        if (in.hasNextLine()) {
-                            String message = in.nextLine();
-                            if (worldsocket.config.debug()) {worldsocket.getLogger().info("received: " + message);}
-                            if(message.equals("ACCEPTED")){
-                                worldsocket.getLogger().info(ChatColor.GREEN + "Connect to socket server!");
-                            }else if(message.equals("ERROR:NAME_USED")) {
-                                worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
-                            }else if(message.equals("ERROR:WRONG_PASSWORD")){
-                                worldsocket.getLogger().warning(ChatColor.RED + "Wrong password!");
-                            }else {
-                                JsonParser jsonParser = new JsonParser();
-                                JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
-                                if(jsonmsg.get("receiver").getAsString().toLowerCase().equals(worldsocket.config.name()) && !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
-                                    worldsocket.eventsender.addeventqueue(message);
-                                }else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")&& !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
-                                    worldsocket.eventsender.addeventqueue(message);
-                                }else if(jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
-
-                                }
-                            }
-
-                        }
-                    }
-                }
-            } catch (Exception e) {e.printStackTrace();}
-        }
     }
 
     private class sender extends Thread {

@@ -123,7 +123,7 @@ public class SSLsocketserver extends Thread {
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());
-                out = new PrintWriter(socket.getOutputStream());
+                out = new PrintWriter(socket.getOutputStream(), true);
                 while (true) {
                     loginmessage = in.nextLine();
                     if (loginmessage == null) {
