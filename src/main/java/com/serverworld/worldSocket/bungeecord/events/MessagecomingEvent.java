@@ -7,6 +7,8 @@ import org.bukkit.event.HandlerList;
 
 public class MessagecomingEvent extends Event {
 
+    private static final HandlerList HANDLERS = new HandlerList();
+
     final String msg;
 
     private String sender;
@@ -16,7 +18,11 @@ public class MessagecomingEvent extends Event {
     private String message;
 
     public HandlerList getHandlers() {
-        return null;
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 
     public MessagecomingEvent(String msg) {
