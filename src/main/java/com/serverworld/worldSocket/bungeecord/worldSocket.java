@@ -49,7 +49,7 @@ public class worldSocket extends Plugin {
             socketserver = new socketserver(this);
             socketserver.start();
         }
-        getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
+        //getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
 
     }
     public void sendmessage(String msg){
