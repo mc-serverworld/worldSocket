@@ -83,6 +83,7 @@ public class socketserver extends Thread {
             this.socket = socket;
         }
 
+        @Override
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());

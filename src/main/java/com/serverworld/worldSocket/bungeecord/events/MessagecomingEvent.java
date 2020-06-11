@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import net.md_5.bungee.api.plugin.Event;
 
 public class MessagecomingEvent extends Event {
-
     final String msg;
 
     private String sender;

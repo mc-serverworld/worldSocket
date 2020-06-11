@@ -3,6 +3,7 @@ package com.serverworld.worldSocket.bungeecord;
 import com.serverworld.worldSocket.bungeecord.Listeners.Messagecoming;
 import com.serverworld.worldSocket.bungeecord.commands.*;
 import com.serverworld.worldSocket.bungeecord.socket.SSLsocketserver;
+import com.serverworld.worldSocket.bungeecord.socket.eventsender;
 import com.serverworld.worldSocket.bungeecord.socket.socketserver;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -18,13 +19,16 @@ public class worldSocket extends Plugin {
     //config
     public static Configuration configuration;
     public worldSocketconfig config;
+    public eventsender eventsender;
     private File file;
+    private static worldSocket worldSocket;
 
     public socketserver socketserver;
     public SSLsocketserver SSLsocketserver;
 
     @Override
     public void onEnable() {
+        worldSocket = this;
         if (!getDataFolder().exists())
             getDataFolder().mkdir();
 
@@ -51,6 +55,7 @@ public class worldSocket extends Plugin {
             socketserver.start();
         }
         //getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
+        eventsender = new eventsender(this);
         new Messagecoming(this);
     }
     public void sendmessage(String msg){
@@ -60,4 +65,5 @@ public class worldSocket extends Plugin {
             socketserver.sendmessage(msg);
         }
     }
+    public static worldSocket getInstance(){return worldSocket;}
 }

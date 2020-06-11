@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 
 import javax.net.ssl.*;
+import javax.swing.plaf.SplitPaneUI;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -110,6 +111,7 @@ public class SSLsocketserver extends Thread {
             }
         }
     }
+
     private static class Handler implements Runnable {
         private String loginmessage;
         private String name;
@@ -121,6 +123,7 @@ public class SSLsocketserver extends Thread {
             this.socket = socket;
         }
 
+        @Override
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());
@@ -165,13 +168,13 @@ public class SSLsocketserver extends Thread {
                     JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
                     try {
                         if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
-                            ProxyServer.getInstance().getPluginManager().callEvent(new MessagecomingEvent(input));
+                            worldsocket.eventsender.addeventqueue(input);
                         if(worldsocket.config.debug())
                             worldsocket.getLogger().info("Event send");
                         }
 
                         else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")){
-                            ProxyServer.getInstance().getPluginManager().callEvent(new MessagecomingEvent(input));
+                            worldsocket.eventsender.addeventqueue(input);
                         if(worldsocket.config.debug())
                             worldsocket.getLogger().info("Event send");
                         }

@@ -30,21 +30,12 @@ import net.md_5.bungee.event.EventHandler;
 
 public class Messagecoming implements Listener {
 
-    private worldSocket worldSocket;
-
     public Messagecoming(Plugin plugin){
         ProxyServer.getInstance().getPluginManager().registerListener(plugin, this);
     }
     @EventHandler
     public void onMessagecomingEvent(MessagecomingEvent event){
-     /*   if(!event.getChannel().equals("MISF"))
-            return;
-        if(!event.getReceiver().toLowerCase().equals("porxy"))
-            return;*/
-        try {
-            ProxyServer.getInstance().getLogger().info((ChatColor.GREEN + "Getbysocket: " + event.getMessage()));
-        }catch (Exception e){
-            ProxyServer.getInstance().getLogger().info("Error on socket msg "+e.getMessage());
-        }
+        if(worldSocket.getInstance().config.debug())
+            worldSocket.getInstance().getLogger().info("Event fired");
     }
 }
