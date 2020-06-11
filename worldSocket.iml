@@ -44,6 +44,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-buffer:4.1.49.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-transport:4.1.49.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-resolver:4.1.49.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
   </component>
 </module>

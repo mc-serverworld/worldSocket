@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.serverworld.worldSocket.bungeecord.events.MessagecomingEvent;
 import com.serverworld.worldSocket.bungeecord.worldSocket;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -162,6 +163,22 @@ public class SSLsocketserver extends Thread {
                     }
                     JsonParser jsonParser = new JsonParser();
                     JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
+                    try {
+                        if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
+                            ProxyServer.getInstance().getPluginManager().callEvent(new MessagecomingEvent(input));
+                        if(worldsocket.config.debug())
+                            worldsocket.getLogger().info("Event send");
+                        }
+
+                        else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")){
+                            ProxyServer.getInstance().getPluginManager().callEvent(new MessagecomingEvent(input));
+                        if(worldsocket.config.debug())
+                            worldsocket.getLogger().info("Event send");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                     if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
                         if(worldsocket.config.debug()){
                             worldsocket.getLogger().info(name + "send message: " + input);
@@ -172,7 +189,6 @@ public class SSLsocketserver extends Thread {
                             writer.flush();
                         }
                     }
-                    worldsocket.getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
                 }
             } catch (Exception e) {
                 System.out.println(e);

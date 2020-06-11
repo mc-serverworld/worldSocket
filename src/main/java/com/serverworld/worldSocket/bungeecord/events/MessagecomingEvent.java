@@ -3,7 +3,6 @@ package com.serverworld.worldSocket.bungeecord.events;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.md_5.bungee.api.plugin.Event;
-import org.bukkit.event.HandlerList;
 
 public class MessagecomingEvent extends Event {
 

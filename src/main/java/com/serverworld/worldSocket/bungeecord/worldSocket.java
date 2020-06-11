@@ -1,5 +1,6 @@
 package com.serverworld.worldSocket.bungeecord;
 
+import com.serverworld.worldSocket.bungeecord.Listeners.Messagecoming;
 import com.serverworld.worldSocket.bungeecord.commands.*;
 import com.serverworld.worldSocket.bungeecord.socket.SSLsocketserver;
 import com.serverworld.worldSocket.bungeecord.socket.socketserver;
@@ -50,7 +51,7 @@ public class worldSocket extends Plugin {
             socketserver.start();
         }
         //getProxy().getPluginManager().registerCommand(this,new worldSocketcommands(this));
-
+        new Messagecoming(this);
     }
     public void sendmessage(String msg){
         if(config.useSSL()){
