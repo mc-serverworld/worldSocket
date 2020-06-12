@@ -27,7 +27,7 @@ public class SSLsocketserver extends Thread {
     private sender sender;
     private static Set<String> names = new HashSet<>();
     private static Set<PrintWriter> writers = new HashSet<>();
-    public static worldSocket worldsocket;
+    //public static worldSocket worldsocket;
 
     private SSLContext ctx;
     private KeyManagerFactory kmf;
@@ -42,15 +42,15 @@ public class SSLsocketserver extends Thread {
     private String SERVER_TRUST_KEY_STORE_PASSWORD;
 
     public SSLsocketserver(worldSocket worldSocket) {
-        worldsocket=worldSocket;
+        //worldsocket=worldSocket;
     }
 
     public void run() {
         try{
-            SERVER_KEY_STORE_FILE = worldsocket.config.server_keyStore_file();
-            SERVER_TRUST_KEY_STORE_FILE = worldsocket.config.server_trustStore_file();
-            SERVER_KEY_STORE_PASSWORD = worldsocket.config.server_keyStore_password();
-            SERVER_TRUST_KEY_STORE_PASSWORD = worldsocket.config.server_trustStore_password();
+            SERVER_KEY_STORE_FILE = worldSocket.getInstance().config.server_keyStore_file();
+            SERVER_TRUST_KEY_STORE_FILE = worldSocket.getInstance().config.server_trustStore_file();
+            SERVER_KEY_STORE_PASSWORD = worldSocket.getInstance().config.server_keyStore_password();
+            SERVER_TRUST_KEY_STORE_PASSWORD = worldSocket.getInstance().config.server_trustStore_password();
             ctx = SSLContext.getInstance("SSL");
 
             kmf = KeyManagerFactory.getInstance("SunX509");
@@ -70,15 +70,15 @@ public class SSLsocketserver extends Thread {
             e.printStackTrace();
         }
         try{
-            SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldsocket.config.port());
-            listener.setNeedClientAuth(worldsocket.config.forceSSL());
-            worldsocket.getLogger().info("starting socket server...");
-            worldsocket.getLogger().info("using SSL");
-            if(worldsocket.config.forceSSL())
-                worldsocket.getLogger().info("force using SSL");
-            worldsocket.getLogger().info("using port "+worldsocket.config.port());
-            ExecutorService pool = Executors.newFixedThreadPool(worldsocket.config.threads());
-            worldsocket.getLogger().info("using "+worldsocket.config.threads()+" threads");
+            SSLServerSocket listener = (SSLServerSocket) ctx.getServerSocketFactory().createServerSocket(worldSocket.getInstance().config.port());
+            listener.setNeedClientAuth(worldSocket.getInstance().config.forceSSL());
+            worldSocket.getInstance().getLogger().info("starting socket server...");
+            worldSocket.getInstance().getLogger().info("using SSL");
+            if(worldSocket.getInstance().config.forceSSL())
+                worldSocket.getInstance().getLogger().info("force using SSL");
+            worldSocket.getInstance().getLogger().info("using port "+worldSocket.getInstance().config.port());
+            ExecutorService pool = Executors.newFixedThreadPool(worldSocket.getInstance().config.threads());
+            worldSocket.getInstance().getLogger().info("using "+worldSocket.getInstance().config.threads()+" threads");
             while (true) {
                 pool.execute(new Handler((SSLSocket) listener.accept()));
             }
@@ -138,24 +138,24 @@ public class SSLsocketserver extends Thread {
                         JsonObject jsonmsg = jsonParser.parse(loginmessage).getAsJsonObject();
                         name = jsonmsg.get("name").getAsString();
                         if (!names.contains(name)) {
-                            if (jsonmsg.get("password").getAsString().equals(worldsocket.config.password())){
+                            if (jsonmsg.get("password").getAsString().equals(worldSocket.getInstance().config.password())){
                                 names.add(name);
                                 break;
                             }else {
                                 out.println("ERROR:WRONG_PASSWORD");
                                 out.flush();
-                                worldsocket.getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!" + " IP: " + socket.getRemoteSocketAddress());
+                                worldSocket.getInstance().getLogger().warning(ChatColor.RED + "Warring: Some one try to login with wrong password!" + " IP: " + socket.getRemoteSocketAddress());
                             }
                         }else {
                             out.println("ERROR:NAME_USED");
                             out.flush();
-                            worldsocket.getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
+                            worldSocket.getInstance().getLogger().warning(ChatColor.YELLOW + "Opps! seem some one use the same name: " + name);
                         }
                     }
                 }
                 out.println("ACCEPTED");
                 out.flush();
-                worldsocket.getLogger().info("Socket join: " + name);
+                worldSocket.getInstance().getLogger().info("Socket join: " + name);
                 //for (PrintWriter writer : writers) { }
                 writers.add(out);
                 //-------END---------
@@ -168,24 +168,24 @@ public class SSLsocketserver extends Thread {
                     JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
                     try {
                         if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
-                            worldsocket.eventsender.addeventqueue(input);
-                        if(worldsocket.config.debug())
-                            worldsocket.getLogger().info("Event send");
+                            worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
+                        if(worldSocket.getInstance().config.debug())
+                            worldSocket.getInstance().getLogger().info("Event send");
                         }
 
                         else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")){
-                            worldsocket.eventsender.addeventqueue(input);
-                        if(worldsocket.config.debug())
-                            worldsocket.getLogger().info("Event send");
+                            worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
+                        if(worldSocket.getInstance().config.debug())
+                            worldSocket.getInstance().getLogger().info("Event send");
                         }
                     }catch (Exception e){
                         e.printStackTrace();
                     }
 
                     if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
-                        if(worldsocket.config.debug()){
-                            worldsocket.getLogger().info(name + "send message: " + input);
-                            worldsocket.getLogger().info("sent to " + writers.size() + " clients");
+                        if(worldSocket.getInstance().config.debug()){
+                            worldSocket.getInstance().getLogger().info(name + "send message: " + input);
+                            worldSocket.getInstance().getLogger().info("sent to " + writers.size() + " clients");
                         }
                         for (PrintWriter writer : writers) {
                             writer.println(input);
@@ -201,7 +201,7 @@ public class SSLsocketserver extends Thread {
                 }
                 if (name != null) {
                     names.remove(name);
-                    worldsocket.getLogger().info("Socket quit: " + name);
+                    worldSocket.getInstance().getLogger().info("Socket quit: " + name);
                 }
                 try {
                     socket.close();
