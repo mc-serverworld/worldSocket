@@ -165,9 +165,9 @@ public class SSLsocketserver extends Thread {
                         return;
                     }
                     if (input.toUpperCase().equals("CONNECTCHECK")){
-                        out.print("CHECK:ONLINE");
+                        out.println("CHECK:ONLINE");
                         if(worldSocket.getInstance().config.debug())
-                            worldSocket.getInstance().getLogger().info(name + "checking connection");
+                            worldSocket.getInstance().getLogger().info(name + " checking connection");
 
                     }else {
                         JsonParser jsonParser = new JsonParser();
