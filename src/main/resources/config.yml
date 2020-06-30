@@ -3,7 +3,7 @@
 # Gitgub: https://github.com/mc-serverworld/worldsocket
 
 configinfo:
-  api-version: 4
+  api-version: 5
   debug: false
 #dont touch this plz
 
@@ -17,6 +17,8 @@ socketserver:
 client:
   name: "server"
   host: "127.0.0.1"
+  check-rate: 60
+  #rate to check connection, use tick (20tick = 1sec)
 
 SSL:
   useSSL: false

@@ -101,7 +101,11 @@ public class SSLsocketclient {
                             worldsocket.getLogger().warning(ChatColor.RED + "The name has been used!");
                         }else if(message.equals("ERROR:WRONG_PASSWORD")){
                             worldsocket.getLogger().warning(ChatColor.RED + "Wrong password!");
-                        }else {
+                        }else if(message.equals("CHECK:ONLINE")){
+                            worldsocket.checker.clearlist();
+                            if (worldsocket.config.debug())
+                                worldsocket.getLogger().info(ChatColor.GREEN + "Connect check!");
+                        } else {
                             JsonParser jsonParser = new JsonParser();
                             JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
                             if(jsonmsg.get("receiver").getAsString().toLowerCase().equals(worldsocket.config.name()) && !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){

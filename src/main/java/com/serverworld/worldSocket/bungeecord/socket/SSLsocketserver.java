@@ -164,32 +164,36 @@ public class SSLsocketserver extends Thread {
                     if (input.toLowerCase().startsWith("leave")) {
                         return;
                     }
-                    JsonParser jsonParser = new JsonParser();
-                    JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
-                    try {
-                        if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
-                            worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
-                        if(worldSocket.getInstance().config.debug())
-                            worldSocket.getInstance().getLogger().info("Event send");
+                    if (input.toUpperCase().equals("CONNECTCHECK")){
+                        out.print("CHECK:ONLINE");
+                    }else {
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
+                        try {
+                            if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
+                                worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
+                                if(worldSocket.getInstance().config.debug())
+                                    worldSocket.getInstance().getLogger().info("Event send");
+                            }
+
+                            else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")){
+                                worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
+                                if(worldSocket.getInstance().config.debug())
+                                    worldSocket.getInstance().getLogger().info("Event send");
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
 
-                        else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")){
-                            worldSocket.getInstance().getProxy().getPluginManager().callEvent(new MessagecomingEvent(input));
-                        if(worldSocket.getInstance().config.debug())
-                            worldSocket.getInstance().getLogger().info("Event send");
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                    if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
-                        if(worldSocket.getInstance().config.debug()){
-                            worldSocket.getInstance().getLogger().info(name + "send message: " + input);
-                            worldSocket.getInstance().getLogger().info("sent to " + writers.size() + " clients");
-                        }
-                        for (PrintWriter writer : writers) {
-                            writer.println(input);
-                            writer.flush();
+                        if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
+                            if(worldSocket.getInstance().config.debug()){
+                                worldSocket.getInstance().getLogger().info(name + "send message: " + input);
+                                worldSocket.getInstance().getLogger().info("sent to " + writers.size() + " clients");
+                            }
+                            for (PrintWriter writer : writers) {
+                                writer.println(input);
+                                writer.flush();
+                            }
                         }
                     }
                 }

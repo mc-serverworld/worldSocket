@@ -19,6 +19,7 @@ public class worldSocketconfig {
     //client
     public String name() {return plugin.getConfig().getString("client.name");}
     public String host() {return plugin.getConfig().getString("client.host");}
+    public Long checkrate() {return plugin.getConfig().getLong("client.check-rate");}
 
     //configinfo
     public int api_version() {return plugin.getConfig().getInt("configinfo.api-version");}
