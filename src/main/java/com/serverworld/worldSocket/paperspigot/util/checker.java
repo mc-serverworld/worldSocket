@@ -1,6 +1,7 @@
 package com.serverworld.worldSocket.paperspigot.util;
 
 import com.serverworld.worldSocket.paperspigot.worldSocket;
+import net.md_5.bungee.api.ChatColor;
 
 import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,8 +15,9 @@ public class checker {
             public void run() {
                 synchronized (list) {
                     if (!list.isEmpty()) {
-                        if(list.size()>3)
+                        if(list.size()>3){
                             worldsocket.reconnect();
+                        }
                     }
                 }
             }
@@ -29,6 +31,8 @@ public class checker {
                 synchronized (list) {
                     list.add("CHECKING:" + new Date().getTime());
                     messager.sendmessage("CONNECTCHECK");
+                    if (worldsocket.config.debug())
+                        worldsocket.getLogger().info("checking connection");
                 }
             }
         }, 0L, worldsocket.config.checkrate());
@@ -37,6 +41,8 @@ public class checker {
     public void clearlist(){
         synchronized (list) {
             list.clear();
+            if (worldsocket.config.debug())
+                worldsocket.getLogger().info(ChatColor.GREEN + "connection checked");
         }
     }
 }

@@ -166,6 +166,9 @@ public class SSLsocketserver extends Thread {
                     }
                     if (input.toUpperCase().equals("CONNECTCHECK")){
                         out.print("CHECK:ONLINE");
+                        if(worldSocket.getInstance().config.debug())
+                            worldSocket.getInstance().getLogger().info(name + "checking connection");
+
                     }else {
                         JsonParser jsonParser = new JsonParser();
                         JsonObject jsonmsg = jsonParser.parse(input).getAsJsonObject();
@@ -187,7 +190,7 @@ public class SSLsocketserver extends Thread {
 
                         if(!jsonmsg.get("receiver").getAsString().toLowerCase().equals("proxy")){
                             if(worldSocket.getInstance().config.debug()){
-                                worldSocket.getInstance().getLogger().info(name + "send message: " + input);
+                                worldSocket.getInstance().getLogger().info(name + " send message: " + input);
                                 worldSocket.getInstance().getLogger().info("sent to " + writers.size() + " clients");
                             }
                             for (PrintWriter writer : writers) {

@@ -103,8 +103,6 @@ public class SSLsocketclient {
                             worldsocket.getLogger().warning(ChatColor.RED + "Wrong password!");
                         }else if(message.equals("CHECK:ONLINE")){
                             worldsocket.checker.clearlist();
-                            if (worldsocket.config.debug())
-                                worldsocket.getLogger().info(ChatColor.GREEN + "Connect check!");
                         } else {
                             JsonParser jsonParser = new JsonParser();
                             JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
