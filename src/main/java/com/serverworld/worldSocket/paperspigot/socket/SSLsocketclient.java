@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.serverworld.worldSocket.paperspigot.util.socketloginer;
 import com.serverworld.worldSocket.paperspigot.worldSocket;
 import net.md_5.bungee.api.ChatColor;
+import org.json.JSONObject;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -106,11 +107,14 @@ public class SSLsocketclient {
                         } else {
                             JsonParser jsonParser = new JsonParser();
                             JsonObject jsonmsg = jsonParser.parse(message).getAsJsonObject();
-                            if(jsonmsg.get("receiver").getAsString().toLowerCase().equals(worldsocket.config.name()) && !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+                            JSONObject json = new JSONObject(message);
+                            if(worldsocket.config.debug())
+                                worldsocket.getLogger().info(json.toString());
+                            if(json.getString("receiver").toLowerCase().equals(worldsocket.config.name().toLowerCase()) && !json.getString("type").toLowerCase().equals("socketapi")){
                                 worldsocket.eventsender.addeventqueue(message);
-                            }else if(jsonmsg.get("receiver").getAsString().toLowerCase().equals("all")&& !jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+                            }else if(json.getString("receiver").toLowerCase().equals("all")&& !json.getString("type").toLowerCase().equals("socketapi")){
                                 worldsocket.eventsender.addeventqueue(message);
-                            }else if(jsonmsg.get("type").getAsString().toLowerCase().equals("socketapi")){
+                            }else if(json.getString("type").toLowerCase().equals("socketapi")){
 
                             }
                         }

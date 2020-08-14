@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.json.JSONObject;
 
 public class MessagecomingEvent extends Event{
 
@@ -28,11 +29,12 @@ public class MessagecomingEvent extends Event{
         this.msg = msg;
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonmsg = jsonParser.parse(msg).getAsJsonObject();
-        sender = jsonmsg.get("sender").getAsString();
-        receiver = jsonmsg.get("receiver").getAsString();
-        type = jsonmsg.get("type").getAsString();
-        channel = jsonmsg.get("channel").getAsString();
-        message = jsonmsg.get("message").getAsString();
+        JSONObject json = new JSONObject(msg);
+        sender = json.getString("sender");
+        receiver = json.getString("receiver");
+        type = json.getString("type");
+        channel = json.getString("channel");
+        message = json.getString("message");
     }
 
 
