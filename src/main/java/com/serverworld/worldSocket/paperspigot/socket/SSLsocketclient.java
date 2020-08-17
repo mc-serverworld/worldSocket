@@ -112,11 +112,23 @@ public class SSLsocketclient {
                                 worldsocket.getLogger().info(json.toString());
                             if(json.getString("receiver").toLowerCase().equals(worldsocket.config.name().toLowerCase()) && !json.getString("type").toLowerCase().equals("socketapi")){
                                 worldsocket.eventsender.addeventqueue(message);
+                                if(worldsocket.config.debug()){
+                                    worldsocket.getLogger().info("Event Fired");
+                                    //worldsocket.getLogger().info("Event Fired " + "message: " + "sender: " + json.getString("sender") + " receiver: " + json.getString("receiver") + " channel: " + json.getString("channel") + " type: " + json.getString("type"));
+                                }
                             }else if(json.getString("receiver").toLowerCase().equals("all")&& !json.getString("type").toLowerCase().equals("socketapi")){
                                 worldsocket.eventsender.addeventqueue(message);
+                                if(worldsocket.config.debug()){
+                                    worldsocket.getLogger().info("Event Fired");
+                                    //worldsocket.getLogger().info("Event Fired " + "message: " + "sender: " + json.getString("sender") + " receiver: " + json.getString("receiver") + " channel: " + json.getString("channel") + " type: " + json.getString("type"));
+                                }
+
+
                             }else if(json.getString("type").toLowerCase().equals("socketapi")){
 
-                            }
+                            }else
+                                if (worldsocket.config.debug())
+                                worldsocket.getLogger().info(ChatColor.YELLOW + "Unknow message");
                         }
 
                     }

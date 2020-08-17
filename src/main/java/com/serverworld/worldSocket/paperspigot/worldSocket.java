@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class worldSocket extends JavaPlugin {
 
     public worldSocketconfig config;
+    public worldSocketCommands commands;
     public eventsender eventsender;
     public socketclient socketclient;
     public SSLsocketclient SSLsocketclient;
@@ -45,6 +46,7 @@ public class worldSocket extends JavaPlugin {
 
         messager = new messager(this);
         checker = new checker(this);
+        commands = new worldSocketCommands(this);
     }
     public void sendmessage(String msg){
         if(config.useSSL()){
